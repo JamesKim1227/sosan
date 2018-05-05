@@ -1,27 +1,8 @@
-#include "common.h"
+#include "list.h"
 
-typedef struct sosan_sll_node_t sosan_sll_node_t;
 
-struct sosan_sll_node_t {
-	//void *data;
-	int data;
-	sosan_sll_node_t *next;
-};
-
-typedef struct sosan_sll_list_t {
-	sosan_sll_node_t *head;
-} sosan_sll_list_t;
-
-int sll_create(sosan_sll_list_t **list);
-int sll_destroy();
-int sll_insert(sosan_sll_list_t *list, int data);
-int sll_delete(sosan_sll_list_t *list);
-int sll_printall(sosan_sll_list_t *list);
-
-int sll_create(sosan_sll_list_t **list) {
-	int ret = 0;
-
-	*list = (sosan_sll_list_t *)malloc(sizeof(sosan_sll_list_t));
+int sllInit(SosanSllList **list) {
+	*list = (SosanSllList *)malloc(sizeof(SosanSllList));
 	if (!*list) { return -1; }
 
 	(*list)->head = NULL;
@@ -29,8 +10,8 @@ int sll_create(sosan_sll_list_t **list) {
 	return 0;
 }
 
-int sll_insert(sosan_sll_list_t *list, int data) {
-	sosan_sll_node_t *node = (sosan_sll_node_t*)malloc(sizeof(sosan_sll_node_t));
+int sllAppendNode(SosanSllList *list, int data) {
+	SosanSllNode *node = (SosanSllNode*)malloc(sizeof(SosanSllNode));
 	node->data = data;
 	node->next = NULL;
 
@@ -39,15 +20,15 @@ int sll_insert(sosan_sll_list_t *list, int data) {
 		return 0;
 	}
 
-	sosan_sll_node_t *tmp = list->head;
+	SosanSllNode *tmp = list->head;
 	while (tmp->next != NULL) {
 		tmp = tmp->next;
 	}
 	tmp->next = node;
 }
 
-int sll_delete(sosan_sll_list_t *list) {
-	sosan_sll_node_t *node = list->head;
+int sllDeleteLastNode(SosanSllList *list) {
+	SosanSllNode *node = list->head;
 
 	if (node->next == NULL) {
 		free(node);
@@ -55,7 +36,7 @@ int sll_delete(sosan_sll_list_t *list) {
 		return 0;
 	}
 
-	sosan_sll_node_t *priv;
+	SosanSllNode *priv;
 	while (node->next != NULL) {
 		priv = node;
 		node = node->next;
@@ -65,8 +46,8 @@ int sll_delete(sosan_sll_list_t *list) {
 	free(node);
 }
 
-int sll_printall(sosan_sll_list_t *list) {
-	sosan_sll_node_t *node = list->head;
+int sllPrintAllNodes(SosanSllList *list) {
+	SosanSllNode *node = list->head;
 
 	while (node) {
 		printf("%d ", node->data);
@@ -75,8 +56,8 @@ int sll_printall(sosan_sll_list_t *list) {
 	printf("\n");
 }
 
-int sll_destroy(sosan_sll_list_t *list) {
-	sosan_sll_node_t *node = list->head;
+int sllDestroy(SosanSllList *list) {
+	SosanSllNode *node = list->head;
 
 	while (node) {
 		free(node);
@@ -86,21 +67,21 @@ int sll_destroy(sosan_sll_list_t *list) {
 }
 
 int main() {
-	sosan_sll_list_t *list;
+	SosanSllList *list;
 
-	sll_create(&list);
+	sllInit(&list);
 
-	sll_insert(list, 1);
-	sll_insert(list, 2);
-	sll_insert(list, 3);
-	sll_printall(list);
+	sllAppendNode(list, 1);
+	sllAppendNode(list, 2);
+	sllAppendNode(list, 3);
+	sllPrintAllNodes(list);
 
-	sll_delete(list);
-	sll_printall(list);
+	sllDeleteLastNode(list);
+	sllPrintAllNodes(list);
 
-	sll_insert(list, 5);
-	sll_printall(list);
+	sllAppendNode(list, 5);
+	sllPrintAllNodes(list);
 
-	sll_destroy(list);
+	sllDestroy(list);
 	return 0;
 }
