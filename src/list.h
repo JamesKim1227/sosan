@@ -17,9 +17,11 @@ typedef struct SosanSllList {
 
 
 int sllInit(SosanSllList **list);
-int sllDestroy();
+void sllDestroy(SosanSllList *list);
 int sllAppendNode(SosanSllList *list, int data);
 int sllDeleteLastNode(SosanSllList *list);
-int sllPrintAllNodes(SosanSllList *list);
+void sllPrintAllNodes(SosanSllList *list);
+SosanSllNode *sllAt(SosanSllList *list, int index);
+int sllDeleteNode(SosanSllList *list, SosanSllNode *node);
 
 #endif

@@ -46,7 +46,7 @@ int sllDeleteLastNode(SosanSllList *list) {
 	free(node);
 }
 
-int sllPrintAllNodes(SosanSllList *list) {
+void sllPrintAllNodes(SosanSllList *list) {
 	SosanSllNode *node = list->head;
 
 	while (node) {
@@ -56,7 +56,7 @@ int sllPrintAllNodes(SosanSllList *list) {
 	printf("\n");
 }
 
-int sllDestroy(SosanSllList *list) {
+void sllDestroy(SosanSllList *list) {
 	SosanSllNode *node = list->head;
 
 	while (node) {
@@ -64,6 +64,44 @@ int sllDestroy(SosanSllList *list) {
 		node = node->next;
 	}
 	free(list);
+}
+
+SosanSllNode* sllAt(SosanSllList *list, int index) {
+	SosanSllNode *node = list->head;
+
+	while (node != NULL && --index >= 0) {
+		node = node->next;
+	}
+
+	return node;
+}
+
+int sllDeleteNode(SosanSllList *list, SosanSllNode *node) {
+	SosanSllNode *cur = list->head;
+
+	if (!list || !node) return 0;
+
+	if (cur == node) {
+		if (cur->next == NULL ) {
+			free(cur);
+			list->head = NULL;
+		} else {
+			list->head = cur->next;
+		}
+		return 0;
+	}
+
+	SosanSllNode *priv;
+	while (cur->next != NULL) {
+		priv = cur;
+		cur = cur->next;
+
+		if (cur == node) {
+			priv->next = cur->next;
+			free(cur);
+		}
+	}
+	
 }
 
 int main() {
@@ -81,6 +119,15 @@ int main() {
 
 	sllAppendNode(list, 5);
 	sllPrintAllNodes(list);
+
+	SosanSllNode *node = sllAt(list, 1);
+	sllDeleteNode(list, node);
+	sllPrintAllNodes(list);
+
+	node = sllAt(list, 0);
+	sllDeleteNode(list, node);
+	sllPrintAllNodes(list);
+
 
 	sllDestroy(list);
 	return 0;
